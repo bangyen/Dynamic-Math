@@ -308,13 +308,10 @@ class AlgorithmHandler:
                     buffer += token[0]
 
             elif token[1] == "num":
-                if word is True:  # Word + Num // part of a variable
-                    buffer += token[0]
-                elif double is True:  # Double + Num // adding to the double
-                    buffer += token[0]
-                elif number is True:  # Already Construct Num // adding to num
-                    buffer += token[0]
-                elif func is True:
+                # Word + Num // part of a variable
+                # Double + Num // adding to the double
+                # Already Construct Num // adding to num
+                if any([word, double, number, func]):
                     buffer += token[0]
                 else:  # Start to a number
                     number = True
@@ -485,26 +482,16 @@ class AlgorithmHandler:
 #
 
 def prec(c):
-    if c == '+' or c == '-':
-        return 1
-    elif c == '*' or c == '/':
-        return 2
-    elif c == '^':
-        return 3
-    elif c == '(' or c == ')':
-        return 4
-    return -1
+    return '+-*/^^()'.find(c)
 
 
 def handleOperation(values, val2, val1, c):
-    if c == '+':
-        values.append(val2 + val1)
-    elif c == '-':
-        values.append(val2 - val1)
-    elif c == '*':
-        values.append(val2 * val1)
-    elif c == '/':
-        values.append(val2 / val1)
-    elif c == '^':
-        values.append(val2 ** val1)
-
+    op_dict = {
+        '+': lambda: val2 + val1,
+        '-': lambda: val2 - val1,
+        '*': lambda: val2 * val1,
+        '/': lambda: val2 / val1,
+        '^': lambda: val2 ** val1
+    }
+    if c in op_dict:
+        values.append(op_dict[c]())
