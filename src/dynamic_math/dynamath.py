@@ -482,7 +482,8 @@ class AlgorithmHandler:
 #
 
 def prec(c):
-    return '+-*/^^()'.find(c)
+    syms = '+-*/^^()'
+    return syms.index(c) // 2 + 1 if c in syms else -1
 
 
 def handleOperation(values, val2, val1, c):
